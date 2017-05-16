@@ -1,6 +1,6 @@
 # /user/bin/env python
 # -*-coding:utf-8-*-
-
+from abc import abstractmethod
 import math
 
 
@@ -42,3 +42,38 @@ class RankingAlgorithm:
             return 1
         else:
             return ef * (1 + 1.0 / (2 * ep + ef))
+
+
+class Feature:
+    @abstractmethod
+    def cal(self, x): pass
+
+
+class TarFeature(Feature):
+    def cal(self, x):
+        assert (len(x) == 4)
+        return RankingAlgorithm.tarantula(self, x[0], x[1], x[2], x[3])
+
+
+class OchiFeature(Feature):
+    def cal(self, x):
+        assert (len(x) == 4)
+        return RankingAlgorithm.ochiai(self, x[0], x[1], x[2], x[3])
+
+
+class JacFeature(Feature):
+    def cal(self, x):
+        assert (len(x) == 4)
+        return RankingAlgorithm.jaccard(self, x[0], x[1], x[2], x[3])
+
+
+class Gpl3Feature(Feature):
+    def cal(self, x):
+        assert (len(x) == 4)
+        return RankingAlgorithm.gp13(self, x[0], x[1], x[2], x[3])
+
+
+class NaiFeature(Feature):
+    def cal(self, x):
+        assert (len(x) == 4)
+        return RankingAlgorithm.naish2(self, x[0], x[1], x[2], x[3])
