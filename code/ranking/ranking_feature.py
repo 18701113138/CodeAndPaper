@@ -49,6 +49,24 @@ class Feature:
     def cal(self, x): pass
 
 
+class BoostFeature(Feature):
+    feature = []
+    a = []
+
+    def __init__(self, feature, a):
+        self.feature = feature
+        self.a = a
+
+    def cal(self, x):
+        assert (len(self.features) == len(self.a))
+        assert (len(x) == 4)
+        result = 0
+        len = len(self.a)
+        for i in range(len):
+            result += self.a[i] * self.features[i].cal(x)
+        return result
+
+
 class TarFeature(Feature):
     def cal(self, x):
         assert (len(x) == 4)

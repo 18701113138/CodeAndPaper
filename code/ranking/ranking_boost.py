@@ -3,11 +3,13 @@
 
 import math
 
+from sklearn import preprocessing
+
 from code.ranking.ranking_feature import Feature
 
 
 class RankBoost:
-    # vectors是向量集合，以list表示
+    # vectors是向量集合，以list表示n*4
     # features是特征列表，即排序候选者,以list表示
     # distribution是初始化特征值矩阵，以list（list）表示
     # 返回a
@@ -25,11 +27,19 @@ class RankBoost:
             for j in range(num_vec):
                 if isinstance(features[i], Feature):
                     weak_ranking.append(features[i].cal(vectors[j]))  # 计算每个函数的怀疑度
+            # min_max_scaler = preprocessing.MinMaxScaler()
+            # weak_ranking = min_max_scaler.fit_transform(weak_ranking)
+
             # cal a
             a.append(self.cal_a(self, distribution, weak_ranking))
             # update distrubution
             distribution = self.update_D(self, distribution, weak_ranking, a[i])
-
+        # 归一化
+        sum = 0.0
+        for t in a:
+            sum += t
+        a = [t/sum for t in a]
+        # 返回
         return a
 
     # D是distribution，H是未排序的怀疑度值

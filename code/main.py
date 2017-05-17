@@ -3,34 +3,17 @@
 # 读取文件，并返回整形二维数组
 from code.clustering.fuzzy_c_means import FCM
 from code.ranking.ranking_feature import *
+from code.train.data_statistics import DataStatistics
+from code.train.file_io import FileIO
 
 
-def read(file):
-    file_obj = open(file)
-    try:
-        file_line = file_obj.readlines()
-        num = []
-        for line in file_line:
-            num_str = line.split(' ')
-            num_int = [int(str) for str in num_str]
-            num.append(num_int)
-        return num
-    finally:
-        file_obj.close()
-        return None
 
-
-# 获取路径和结果信息
-def get_trace_and_result(num):
-    trace = []
-    result = []
-    for n in num:
-        trace.append(reversed(n[:-2]))
-        result.append(n[-1])
-    return (trace, result)
 
 
 # 删除偶然正确性测试用例，返回删除后的结果和删除比例
+from code.train.train import Train
+
+
 def delete_accidental_correctness(trace, result, u):
     u_01 = [1 if tmp > 0.5 else 0 for t in u for tmp in t]
     # 统计
@@ -62,32 +45,16 @@ def delete_accidental_correctness(trace, result, u):
     return (trace1, result1, rate)
 
 
-# 获取向量信息
-def get_vectors(trace, result):
-    num = []
-    len = len(trace)
-    for i in range(len):
-        num.append(trace[i])
-        num[i].append(result[i])
-    vectors = num
-    vectors = [1 if n > 0 else 0 for vector in vectors for n in vector]
-    return vectors
-
-
-# 初始化Feature信息
-def init_feature():
-    f1 = TarFeature
-    f2 = OchiFeature
-    f3 = JacFeature
-    f4 = Gpl3Feature
-    f5 = NaiFeature
-    return [f1, f2, f3, f4, f5]
-
-
 if __name__ == "__main__":
-    num = read("a.txt")
-    assert (num != None)
-    (trace, result) = get_trace_and_result(num)
+    # 训练
+    has_trained = False
+    boost_feature = None
+    if has_trained == False:
+        boost_feature = Train.start('./path','./pairs')
+
+
+    [data, trace, result] = FileIO.read_a_file('me.txt')
+    assert (len(data) > 0)
     # 偶然正确性
     fcm = FCM
     u = fcm.alg_fcm(trace, fcm.init_u(len(trace), 2), 3, 2, 0.01)
@@ -95,9 +62,9 @@ if __name__ == "__main__":
     (trace1, result1, rate) = delete_accidental_correctness(trace, result, u)
     print(trace1, result1, rate)
 
-    # 训练
-    # 1.获取向量信息，初始化Feature信息
-    vectors = get_vectors(trace1, result1)
-    features = init_feature()
-
+    # 排名
+    vectors = DataStatistics.get_veators_from_a_program(trace1,result1);
+    ans = [boost_feature.cal(vector) for vector in vectors];
+    ans.sort(reverse=True)
+    print(ans)
 
