@@ -1,7 +1,6 @@
 # /user/bin/env python
 # -*-coding:utf-8-*-
 from code.ranking.ranking_feature import *
-from code.train.train import Train
 
 
 class DataStatistics:
@@ -17,7 +16,7 @@ class DataStatistics:
 
     # 根据数据得到一个程序中的向量
     @staticmethod
-    def get_veators_from_a_program(self, trace, result):
+    def get_veators_from_a_program(trace, result):
         assert (len(trace) > 0)
         assert (len(trace[0]) > 0)
         assert (len(trace[0]) == len(result))
@@ -43,7 +42,7 @@ class DataStatistics:
 
     # 根据数据得到一堆程序中的向量
     @staticmethod
-    def get_veators_from_programs(self, data_trace_result):
+    def get_veators_from_programs(data_trace_result):
         vectors = []
         for dta in data_trace_result:
             vectors_tmp = DataStatistics.get_veators_from_a_program(dta[1],dta[2]);
@@ -52,7 +51,7 @@ class DataStatistics:
 
     # 合并两个矩阵
     @staticmethod
-    def merge_two_matrix(self, matrix_a, matrix_b):
+    def merge_two_matrix(matrix_a, matrix_b):
         assert (len(matrix_a) >= 0)
         assert (len(matrix_b) >= 0)
         assert (len(matrix_a[0]) >= 0)
@@ -70,10 +69,10 @@ class DataStatistics:
 
     # 合并多个矩阵
     @staticmethod
-    def merge(self, matrixs):
+    def merge(matrixs):
         matrix = []
         for m in matrixs:
-            matrix = Train.merge_two_matrix(matrix, m)
+            matrix = DataStatistics.merge_two_matrix(matrix, m)
         # 归一化
         row = len(matrix)
         col = len(matrix[0])

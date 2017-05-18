@@ -2,7 +2,6 @@
 # -*-coding:utf-8-*-
 # 读取文件，并返回整形二维数组
 from code.clustering.fuzzy_c_means import FCM
-from code.ranking.ranking_feature import *
 from code.train.data_statistics import DataStatistics
 from code.train.file_io import FileIO
 

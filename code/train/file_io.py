@@ -7,7 +7,7 @@ import os
 class FileIO:
     # 读取数据和pairs
     @staticmethod
-    def read(self, path_data, path_pairs):
+    def read(path_data, path_pairs):
         # 获取文件名
         data_files = os.listdir(path_data)
         pairs_files = os.listdir(path_pairs)
@@ -18,6 +18,7 @@ class FileIO:
         # 获取完整文件名
         len = len_data
         for i in range(len):
+            assert (data_files[i] == pairs_files[i])
             data_files[i] = path_data + data_files[i]
             pairs_files[i] = path_pairs + pairs_files[i]
         # 获取data和pairs
@@ -28,7 +29,7 @@ class FileIO:
 
     # 读取一个文件，返回完整数据矩阵data、trace、result
     @staticmethod
-    def read_a_file(self, file):
+    def read_a_file(file):
         file_obj = open(file)
         try:
             file_line = file_obj.readlines()
@@ -53,7 +54,7 @@ class FileIO:
 
     # 读取一堆文件，返回完整数据矩阵data、trace、result
     @staticmethod
-    def read_files(self, files):
+    def read_files(files):
         result = []
         for file in files:
             result.append(FileIO.read_a_file(file))
@@ -61,7 +62,7 @@ class FileIO:
 
     # 读取一个文件，返回pairs矩阵
     @staticmethod
-    def read_pairs_from_a_file(self, file):
+    def read_pairs_from_a_file(file):
         file_obj = open(file)
         try:
             # 读取两行
@@ -90,7 +91,7 @@ class FileIO:
 
     # 读取一堆文件，返回完整数据矩阵data、trace、result
     @staticmethod
-    def read_pairs_from_files(self, files):
+    def read_pairs_from_files(files):
         result = []
         for file in files:
             result.append(FileIO.read_pairs_from_a_file(file))

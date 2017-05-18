@@ -15,7 +15,7 @@ class FCM:
 
     # 给定同维向量数据集合points，数目为n，将其聚为C类，m为权重值，u为初始匹配度矩阵（n*C），采用闵式距离算法，其参数为p，迭代终止条件为终止值e（取值范围(0，1））及终止轮次
     # 计算停止时返回计算的轮次和匹配度矩阵，返回值为一个tuple:(最终计算过后的u矩阵,计算轮次（从0开始）)
-    def alg_fcm(self, points, u, m, p, e, terminateturn=sys.maxint):
+    def alg_fcm(self, points, u, m, p, e, terminateturn=10000):
         assert (len(points) == len(u));
         assert (len(points) > 0);
         assert (len(u[0]) > 0);
