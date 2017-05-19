@@ -10,13 +10,15 @@ class Train:
     # 输入两个文件夹，一个是路径数组，一个是对应的pairs
     # 输出feature
     def start(path1,path2):
-        [data, pairs] = FileIO.read(path1,path2);
+        [data, pairs] = FileIO.read(path1,path2)
         features = DataStatistics.init_feature()
         vectors = DataStatistics.get_veators_from_programs(data)
         distribution = DataStatistics.merge(pairs)
-        a = RankBoost.boost(vectors,features,distribution)
+        rb = RankBoost
+        a = rb.boost(rb,vectors,features,distribution)
 
-        boost_feature = BoostFeature.__init__(features,a)
+        bg = BoostFeature
+        bg.__init__(bg,features,a)
 
-        return boost_feature
+        return bg
 

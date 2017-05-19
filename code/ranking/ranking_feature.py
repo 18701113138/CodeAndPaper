@@ -58,40 +58,40 @@ class BoostFeature(Feature):
         self.a = a
 
     def cal(self, x):
-        assert (len(self.features) == len(self.a))
+        assert (len(self.feature) == len(self.a))
         assert (len(x) == 4)
         result = 0
-        len = len(self.a)
-        for i in range(len):
-            result += self.a[i] * self.features[i].cal(x)
+        length = len(self.a)
+        for i in range(length):
+            result += self.a[i] * self.feature[i].cal(self.feature[i],x)
         return result
 
 
 class TarFeature(Feature):
     def cal(self, x):
         assert (len(x) == 4)
-        return RankingAlgorithm.tarantula(self, x[0], x[1], x[2], x[3])
+        return RankingAlgorithm.tarantula(x[0], x[1], x[2], x[3])
 
 
 class OchiFeature(Feature):
     def cal(self, x):
         assert (len(x) == 4)
-        return RankingAlgorithm.ochiai(self, x[0], x[1], x[2], x[3])
+        return RankingAlgorithm.ochiai(x[0], x[1], x[2], x[3])
 
 
 class JacFeature(Feature):
     def cal(self, x):
         assert (len(x) == 4)
-        return RankingAlgorithm.jaccard(self, x[0], x[1], x[2], x[3])
+        return RankingAlgorithm.jaccard(x[0], x[1], x[2], x[3])
 
 
 class Gpl3Feature(Feature):
     def cal(self, x):
         assert (len(x) == 4)
-        return RankingAlgorithm.gp13(self, x[0], x[1], x[2], x[3])
+        return RankingAlgorithm.gp13(x[0], x[1], x[2], x[3])
 
 
 class NaiFeature(Feature):
     def cal(self, x):
         assert (len(x) == 4)
-        return RankingAlgorithm.naish2(self, x[0], x[1], x[2], x[3])
+        return RankingAlgorithm.naish2(x[0], x[1], x[2], x[3])

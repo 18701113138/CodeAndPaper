@@ -19,7 +19,7 @@ class DataStatistics:
     def get_veators_from_a_program(trace, result):
         assert (len(trace) > 0)
         assert (len(trace[0]) > 0)
-        assert (len(trace[0]) == len(result))
+        assert (len(trace) == len(result))
 
         vectors = []
 
@@ -28,13 +28,13 @@ class DataStatistics:
         for j in range(col):
             vector = [0, 0, 0, 0]
             for i in range(row):
-                if trace[i][j] > 0 and result[i] == 1:
+                if list(trace[i])[j] > 0 and result[i] == 1:
                     vector[0] += 1
-                elif trace[i][j] > 0 and result[i] == 0:
+                elif list(trace[i])[j] > 0 and result[i] == 0:
                     vector[1] += 1
-                elif trace[i][j] == 0 and result[i] == 1:
+                elif list(trace[i])[j] == 0 and result[i] == 1:
                     vector[2] += 1
-                elif trace[i][j] == 0 and result[i] == 0:
+                elif list(trace[i])[j] == 0 and result[i] == 0:
                     vector[3] += 1
             vectors.append(vector)
 
@@ -46,7 +46,7 @@ class DataStatistics:
         vectors = []
         for dta in data_trace_result:
             vectors_tmp = DataStatistics.get_veators_from_a_program(dta[1],dta[2]);
-            vectors.extend(vectors_tmp)
+            vectors += vectors_tmp
         return vectors
 
     # 合并两个矩阵
@@ -54,17 +54,17 @@ class DataStatistics:
     def merge_two_matrix(matrix_a, matrix_b):
         assert (len(matrix_a) >= 0)
         assert (len(matrix_b) >= 0)
-        assert (len(matrix_a[0]) >= 0)
-        assert (len(matrix_b[0]) >= 0)
-        lenA = len(matrix_a[0])
-        lenB = len(matrix_b[0])
+        assert (len(matrix_a)==0 or len(matrix_a[0]) >= 0)
+        assert (len(matrix_b)==0 or len(matrix_b[0]) >= 0)
+        lenA = 0 if len(matrix_a) == 0 else len(matrix_a[0])
+        lenB = 0 if len(matrix_b) == 0 else len(matrix_b[0])
         zeroA = [0 for i in range(lenA)]
         zeroB = [0 for i in range(lenB)]
         matrix = []
         for i in range(lenA):
-            matrix.append(matrix_a[i].extend(zeroB))
+            matrix.append(matrix_a[i] + zeroB)
         for i in range(lenB):
-            matrix.append(zeroA.extend(matrix_b[i]))
+            matrix.append(zeroA + matrix_b[i])
         return matrix
 
     # 合并多个矩阵
@@ -73,6 +73,8 @@ class DataStatistics:
         matrix = []
         for m in matrixs:
             matrix = DataStatistics.merge_two_matrix(matrix, m)
+            # print(len(matrix))
+            # print(len(matrix[0]))
         # 归一化
         row = len(matrix)
         col = len(matrix[0])
@@ -84,6 +86,6 @@ class DataStatistics:
         for i in range(row):
             for j in range(col):
                 if matrix[i][j] > 0:
-                    matrix[i][j] /= matrix
+                    matrix[i][j] /= num
 
         return matrix
