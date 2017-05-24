@@ -3,6 +3,8 @@
 from abc import abstractmethod
 import math
 
+from sklearn import preprocessing
+
 
 class RankingAlgorithm:
     @staticmethod
@@ -57,14 +59,25 @@ class BoostFeature(Feature):
         self.feature = feature
         self.a = a
 
-    def cal(self, x):
+    def cal(self, vectors):
         assert (len(self.feature) == len(self.a))
-        assert (len(x) == 4)
-        result = 0
-        length = len(self.a)
-        for i in range(length):
-            result += self.a[i] * self.feature[i].cal(self.feature[i],x)
-        return result
+        assert (len(vectors) > 0)
+        answer = []
+        lenth_vec = len(vectors)
+        lenth_a = len(self.a)
+        tmp = []
+        for i in range(lenth_a):
+            tmpp = []
+            for j in range(lenth_vec):
+                tmpp.append(self.feature[i].cal(self.feature[i],vectors[j]))
+            min_max_scaler = preprocessing.MinMaxScaler()
+            tmp.append(min_max_scaler.fit_transform(tmpp))
+        for i in range(lenth_vec):
+            sum = 0
+            for j in range(lenth_a):
+                sum += self.a[j]*tmp[j][i]
+            answer.append(sum)
+        return answer
 
 
 class TarFeature(Feature):

@@ -1,9 +1,11 @@
 # /user/bin/env python
 # -*-coding:utf-8-*-
 # 读取文件，并返回整形二维数组
+from sklearn import preprocessing
+
 from code.clustering.fuzzy_c_means import FCM
-from code.ranking.ranking_feature import BoostFeature
-from code.train.data_statistics import DataStatistics
+from code.ranking.ranking_feature import BoostFeature, TarFeature, OchiFeature
+from code.train.data_statistics import DataStatistics, JacFeature, Gpl3Feature, NaiFeature
 from code.train.file_io import FileIO
 
 
@@ -61,14 +63,31 @@ if __name__ == "__main__":
     # 偶然正确性
     fcm = FCM
     (u ,k)= fcm.alg_fcm(fcm,trace, fcm.init_u(fcm,len(trace), 2), 3, 2, 0.01)
+    print(u)
     # 删除偶然正确性元素
     (trace1, result1, rate) = delete_accidental_correctness(trace, result, u)
     # print(trace1, result1, rate)
 
     # 排名
     vectors = DataStatistics.get_veators_from_a_program(trace1,result1);
-    ans = [boost_feature.cal(boost_feature,vector) for vector in vectors];
-    print(ans)
+    ans = boost_feature.cal(boost_feature,vectors);
+    print('boost',ans)
+    print(boost_feature.a)
+    tar = TarFeature
+    oci = OchiFeature
+    jac = JacFeature
+    gp = Gpl3Feature
+    nai = NaiFeature
+    ans2 = [tar.cal(tar,vector) for vector in vectors]
+    ans3 = [oci.cal(tar, vector) for vector in vectors]
+    ans4 = [jac.cal(tar, vector) for vector in vectors]
+    ans5 = [gp.cal(tar, vector) for vector in vectors]
+    ans6 = [nai.cal(tar, vector) for vector in vectors]
+    print('tar',ans2)
+    print('ochi',ans3)
+    print('jac', ans4)
+    print('gp', ans5)
+    print('nai', ans6)
     ans.sort(reverse=True)
     print(ans)
 

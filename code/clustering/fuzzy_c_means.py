@@ -1,15 +1,18 @@
 # /user/bin/env python
 # -*-coding:utf-8-*-
-
+import random
 import sys
+
 import numpy as np
 
 
 class FCM:
     # 初始化隶属度矩阵
     def init_u(self, n, C):
-        t = [1 / C] * C
-        u = [t] * n
+        u = []
+        for i in range(n):
+            r = random.random()
+            u.append([r, 1 - r])
         return u
 
     # 给定同维向量数据集合points，数目为n，将其聚为C类，m为权重值，u为初始匹配度矩阵（n*C），采用闵式距离算法，其参数为p，迭代终止条件为终止值e（取值范围(0，1））及终止轮次
@@ -26,7 +29,7 @@ class FCM:
         k = 0;
         while (True):
             # calculate one more turn
-            u2 = self.fcm_oneturn(self,points, u1, m, p);
+            u2 = self.fcm_oneturn(self, points, u1, m, p);
             # max difference between u1 and u2
             maxu = self.fcm_maxu(u1, u2);
 
@@ -51,11 +54,11 @@ class FCM:
         c = len(u[0]);
 
         # 迭代c，即计算各类质心，返回list
-        centroids = self.fcm_c(self,points, u, m);
+        centroids = self.fcm_c(self, points, u, m);
         assert (len(centroids) == c);
 
         # 迭代u，更新隶属度矩阵u
-        u2 = self.fcm_u(self,points, centroids, m, p);
+        u2 = self.fcm_u(self, points, centroids, m, p);
         assert (len(u2) == n);
         assert (len(u2[0]) == c);
 
@@ -91,9 +94,9 @@ class FCM:
         for i in range(n):
             for j in range(c):
                 sum1 = 0;
-                d1 = self.dis_minkowski(self,points[i], centroids[j], p);
+                d1 = self.dis_minkowski(self, points[i], centroids[j], p);
                 for k in range(c):
-                    d2 = self.dis_minkowski(self,points[i], centroids[k], p);
+                    d2 = self.dis_minkowski(self, points[i], centroids[k], p);
                     if d2 != 0:
                         sum1 += np.power(d1 / d2, float(2) / (float(m) - 1));
                 if sum1 != 0:
@@ -101,15 +104,15 @@ class FCM:
 
         return ret;
 
-    def dis_minkowski(self,point,centroid,p):
+    def dis_minkowski(self, point, centroid, p):
         sum = 0;
         len_p = len(point)
         len_c = len(centroid)
         assert (len_p == len_c)
         for i in range(len_p):
-            num_abs = np.math.fabs(point[i]-centroid[i])
-            sum += np.math.pow(num_abs,p)
-        return np.math.pow(sum,1/p)
+            num_abs = np.math.fabs(point[i] - centroid[i])
+            sum += np.math.pow(num_abs, p)
+        return np.math.pow(sum, 1 / p)
 
     # 每一个轮次计算类别质心的函数
     def fcm_c(self, points, u, m):
@@ -132,5 +135,4 @@ class FCM:
             else:
                 cj = [0 for d in range(len(points[i]))];
             ret.append(cj);
-
         return ret;

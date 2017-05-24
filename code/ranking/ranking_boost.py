@@ -26,8 +26,8 @@ class RankBoost:
             weak_ranking = []
             for j in range(num_vec):
                 weak_ranking.append(features[i].cal(features[i], vectors[j]))  # 计算每个函数的怀疑度
-            # min_max_scaler = preprocessing.MinMaxScaler()
-            # weak_ranking = min_max_scaler.fit_transform(weak_ranking)
+            min_max_scaler = preprocessing.MinMaxScaler()
+            weak_ranking = min_max_scaler.fit_transform(weak_ranking)
 
             # cal a
             a.append(self.cal_a(self, distribution, weak_ranking))
@@ -50,7 +50,10 @@ class RankBoost:
         for i in range(row):
             for j in range(col):
                 if (D[i][j] > 0):
-                    r += D[i][j] * (H[j] - H[i])
+                    if(H[j] - H[i] < 0):
+                        r += D[i][j]
+                    else:
+                        r -= D[i][j]
         a = 0 if r <= -1 or r >= 1 else 0.5 * math.log((1 + r) / (1 - r), math.e)
         return a
 
