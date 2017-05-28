@@ -26,7 +26,7 @@ class DataStatistics:
         row = len(trace)
         col = len(trace[0])
         for j in range(col):
-            vector = [0, 0, 0, 0]
+            vector = [0, 0, 0, 0] # ep, ef, np, nf
             for i in range(row):
                 if list(trace[i])[j] > 0 and result[i] == 1:
                     vector[0] += 1
@@ -37,7 +37,6 @@ class DataStatistics:
                 elif list(trace[i])[j] == 0 and result[i] == 0:
                     vector[3] += 1
             vectors.append(vector)
-
         return vectors
 
     # 根据数据得到一堆程序中的向量

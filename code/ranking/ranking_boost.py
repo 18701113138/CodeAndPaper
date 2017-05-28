@@ -1,7 +1,8 @@
 # /user/bin/env python
 # -*-coding:utf-8-*-
-
+import copy
 import math
+from time import sleep
 
 from sklearn import preprocessing
 
@@ -18,6 +19,7 @@ class RankBoost:
         assert (len(features) > 0)
 
         a = []
+        loss = []
 
         num_fea = len(features)
         num_vec = len(vectors)
@@ -29,8 +31,10 @@ class RankBoost:
             min_max_scaler = preprocessing.MinMaxScaler()
             weak_ranking = min_max_scaler.fit_transform(weak_ranking)
 
-            # cal a
-            a.append(self.cal_a(self, distribution, weak_ranking))
+            # cal a and loss
+            [a_i,loss_i] = self.cal_a(self, distribution, weak_ranking)
+            a.append(a_i)
+            loss.append(loss_i)
             # update distrubution
             distribution = self.update_D(self, distribution, weak_ranking, a[i])
         # 归一化
@@ -51,22 +55,26 @@ class RankBoost:
             for j in range(col):
                 if (D[i][j] > 0):
                     if(H[j] - H[i] < 0):
-                        r += D[i][j]
+                        r += D[i][j]*(H[j] - H[i])
                     else:
-                        r -= D[i][j]
+                        pass;
+                        # r -= D[i][j]
+        loss = abs(r)
+        print('loss',abs(r));
+        # a = 0 if r <= -1 or r >= 1 else 0.5 * math.log((1 - r) / (r), math.e)
         a = 0 if r <= -1 or r >= 1 else 0.5 * math.log((1 + r) / (1 - r), math.e)
-        return a
+        return [a,loss]
 
     # 更新distribution
     def update_D(self, D, H, a):
         Z = 0
-        D_next = D;
+        D_next = copy.copy(D)
         row = len(D)
         col = len(D[0])
         for i in range(row):
             for j in range(col):
                 if (D[i][j] > 0):
-                    D_next[i][j] = D[i][j] * math.exp(a * (H[j] - H[i]))
+                    D_next[i][j] = D[i][j] * math.exp(a*(H[j] - H[i]))
                     Z += D_next[i][j]
         for i in range(row):
             for j in range(col):
