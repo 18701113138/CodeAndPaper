@@ -6,7 +6,7 @@
 　　　任鑫磊　　　　1120142107<br>
 　　　余永涛　　　　1120142113<br>
 ### 目录介绍<br>
-　　　.idea IDE环境产生，使用的IDE为pycharm<br>
+　　　.idea　　　　 IDE环境产生，使用的IDE为pycharm<br>
 　　　code　　　　 代码<br>
 　　　paper　　　　论文<br>
 　　　evaluation　　测试程序<br>
